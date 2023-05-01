@@ -2,6 +2,7 @@ package io.github.zekerzhayard.cme_world;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,6 +18,10 @@ public class CopyOnWriteArrayListWithMutableIterator<T> extends CopyOnWriteArray
         return new CopyOnWriteArrayListWithMutableIterator<>();
     }
 
+    public static <T> List<T> create(Collection<? extends T> c) {
+        return new CopyOnWriteArrayListWithMutableIterator<>(c);
+    }
+
     private static Method getMethod() {
         try {
             Method m = CopyOnWriteArrayList.class.getDeclaredMethod("getArray");
@@ -25,6 +30,14 @@ public class CopyOnWriteArrayListWithMutableIterator<T> extends CopyOnWriteArray
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public CopyOnWriteArrayListWithMutableIterator() {
+
+    }
+
+    public CopyOnWriteArrayListWithMutableIterator(Collection<? extends T> c) {
+        super(c);
     }
 
     protected Object[] getArray() {

@@ -28,6 +28,15 @@ public class ClassTransformer implements IClassTransformer {
                             }
                         }
                     }
+                } else if (RemapUtils.checkMethodName(cn.name, mn.name, mn.desc, "func_72866_a") && RemapUtils.checkMethodDesc(mn.desc, "(Lnet/minecraft/entity/Entity;Z)V")) {
+                    for (AbstractInsnNode ain : mn.instructions.toArray()) {
+                        if (ain.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                            MethodInsnNode min = (MethodInsnNode) ain;
+                            if (RemapUtils.checkClassName(min.owner, "net/minecraft/entity/Entity") && RemapUtils.checkMethodName(min.owner, min.name, min.desc, "func_184188_bt") && RemapUtils.checkMethodDesc(min.desc, "()Ljava/util/List;")) {
+                                mn.instructions.insert(min, new MethodInsnNode(Opcodes.INVOKESTATIC, "io/github/zekerzhayard/cme_world/CopyOnWriteArrayListWithMutableIterator", "create", "(Ljava/util/Collection;)Ljava/util/List;", false));
+                            }
+                        }
+                    }
                 }
             }
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
